@@ -11,6 +11,7 @@ namespace Bank_maken
         public void Storten(decimal Bedrag)
         {
             Saldo += Bedrag;
+
         }
     }
 }
