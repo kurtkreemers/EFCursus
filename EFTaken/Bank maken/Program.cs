@@ -11,11 +11,38 @@ namespace Bank_maken
         static void Main(string[] args)
         {
             Program program = new Program();
-            foreach (var klant in program.FindAllRekeningen() )
+            List<Klant> klantenLijst = program.GetKlanten(); 
+            foreach (var klant in klantenLijst)
             {
-                Console.WriteLine(klant.Voornaam);
+                Console.WriteLine(klant.KlantNr + ":"+ klant.Voornaam);
+            }
+            Console.WriteLine("Klantnr:");
+            int result;
+            while(!Int32.TryParse(Console.ReadLine(), out result))
+            {
+                Console.WriteLine("Tik een getal:");
+            }          
+                Klant selectedklant = null;
+                selectedklant = klantenLijst.Where(kl => kl.KlantNr == result).FirstOrDefault();
+                if (selectedklant == null)
+                    Console.WriteLine("Klant niet gevonden!!!");
+                else
+                {
+                    Console.WriteLine("Geef het nieuw zichtrekeningnummer :");
+                    var nieuweRekening = new Rekening { RekeningNr = Console.ReadLine(), KlantNr = selectedklant.KlantNr, Saldo = 0, Soort = "Z" };
+                    using (var entities = new BankEntities())
+                    {
+                        entities.Rekeningen.Add(nieuweRekening);
+                        entities.SaveChanges();
+                    }
+                }
+                Console.WriteLine("");
+
+            foreach (var kl in program.FindAllRekeningen() )
+            {
+                Console.WriteLine(kl.Voornaam);
                 decimal totaal = 0;
-                foreach (var rekening in klant.Rekeningen)
+                foreach (var rekening in kl.Rekeningen)
                 {
                     
                     Console.WriteLine(rekening.RekeningNr + "=" + rekening.Saldo);
@@ -34,5 +61,15 @@ namespace Bank_maken
                         select klant).ToList();                      
             }
         }
+        List<Klant> GetKlanten()
+        {
+            using(var entities = new BankEntities())
+            {
+                return (from klant in entities.Klanten
+                        orderby klant.Voornaam
+                        select klant).ToList();
+            }
+        }
+
     }
 }
