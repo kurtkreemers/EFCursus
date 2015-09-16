@@ -131,24 +131,103 @@ namespace EFCursus
             //        Console.WriteLine();
             //    }
             //}
-            var docent3 = new Docent
-            {
-                Voornaam = "Voornaam3",
-                Familienaam = "Familienaam3",
-                Wedde = 3
-            };
+            //var docent3 = new Docent
+            //{
+            //    Voornaam = "Voornaam3",
+            //    Familienaam = "Familienaam3",
+            //    Wedde = 3
+            //};
+            //using (var entities = new OpleidingenEntities())
+            //{
+            //    var campus1 = entities.Campussen.Find(1);
+            //    if (campus1 != null)
+            //    {
+            //        entities.Docenten.Add(docent3);
+            //        docent3.Campus = campus1;
+            //        entities.SaveChanges();
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("Campus 1 niet gevonden");
+            //    }
+            //}
+            //Console.Write("DocentNr.:");
+            //int docentNr;
+            //if (int.TryParse(Console.ReadLine(), out docentNr))
+            //{
+            //    using (var entities = new OpleidingenEntities())
+            //    {
+            //        var docent = entities.Docenten.Find(docentNr);
+            //        if (docent != null)
+            //        {
+            //            Console.WriteLine("Wedde:{0}", docent.Wedde);
+            //            Console.Write("Bedrag:");
+            //            decimal bedrag;
+            //            if (decimal.TryParse(Console.ReadLine(), out bedrag))
+            //            {
+            //                docent.Opslag(bedrag);
+            //                entities.SaveChanges();
+            //            }
+            //            else
+            //            {
+            //                Console.WriteLine("Tik een getal");
+            //            }
+            //        }
+            //        else
+            //        {
+            //            Console.WriteLine("Docent niet gevonden");
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    Console.WriteLine("Tik een getal");
+            //}
+
+            //using (var entities = new OpleidingenEntities())
+            //{
+            //    var campus1 = entities.Campussen.Find(1);
+            //    if (campus1 != null)
+            //    {
+            //        foreach (var docent in campus1.Docenten)
+            //        {
+            //            docent.Opslag(10M);
+            //        }
+            //        entities.SaveChanges();
+            //    }
+            //}
+            //using (var entities = new OpleidingenEntities())
+            //{
+            //    var docent1 = entities.Docenten.Find(1);
+            //    if (docent1 != null)
+            //    {
+            //        docent1.CampusNr = 2;
+            //        entities.SaveChanges();
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("Docent 1 niet gevonden");
+            //    }
+            //}
             using (var entities = new OpleidingenEntities())
             {
-                var campus1 = entities.Campussen.Find(1);
-                if (campus1 != null)
+                var docent1 = entities.Docenten.Find(1);
+                if (docent1 != null)
                 {
-                    entities.Docenten.Add(docent3);
-                    docent3.Campus = campus1;
-                    entities.SaveChanges();
+                    var campus3 = entities.Campussen.Find(3);
+                    if (campus3 != null)
+                    {
+                        campus3.Docenten.Add(docent1);
+                        entities.SaveChanges();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Campus 3 niet gevonden");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Campus 1 niet gevonden");
+                    Console.WriteLine("Docent 1 niet gevonden");
                 }
             }
 
