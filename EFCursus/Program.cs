@@ -111,27 +111,49 @@ namespace EFCursus
             //        Console.WriteLine("{0}:{1}", docent.Naam, docent.Campus.Naam);
             //    }
             //}
+            //using (var entities = new OpleidingenEntities())
+            //{
+            //    Console.Write("Deel naam campus:");
+            //    var deelNaam = Console.ReadLine();
+            //    var query = from campus in entities.Campussen.Include("Docenten")
+            //                where campus.Naam.Contains(deelNaam)
+            //                orderby campus.Naam
+            //                select campus;
+            //    foreach (var campus in query)
+            //    {
+            //        var campusNaam = campus.Naam;
+            //        Console.WriteLine(campusNaam);
+            //        Console.WriteLine(new string('-', campusNaam.Length));
+            //        foreach (var docent in campus.Docenten)
+            //        {
+            //            Console.WriteLine(docent.Naam);
+            //        }
+            //        Console.WriteLine();
+            //    }
+            //}
+            var docent3 = new Docent
+            {
+                Voornaam = "Voornaam3",
+                Familienaam = "Familienaam3",
+                Wedde = 3
+            };
             using (var entities = new OpleidingenEntities())
             {
-                Console.Write("Deel naam campus:");
-                var deelNaam = Console.ReadLine();
-                var query = from campus in entities.Campussen.Include("Docenten")
-                            where campus.Naam.Contains(deelNaam)
-                            orderby campus.Naam
-                            select campus;
-                foreach (var campus in query)
+                var campus1 = entities.Campussen.Find(1);
+                if (campus1 != null)
                 {
-                    var campusNaam = campus.Naam;
-                    Console.WriteLine(campusNaam);
-                    Console.WriteLine(new string('-', campusNaam.Length));
-                    foreach (var docent in campus.Docenten)
-                    {
-                        Console.WriteLine(docent.Naam);
-                    }
-                    Console.WriteLine();
+                    entities.Docenten.Add(docent3);
+                    docent3.Campus = campus1;
+                    entities.SaveChanges();
+                }
+                else
+                {
+                    Console.WriteLine("Campus 1 niet gevonden");
                 }
             }
+
             Console.ReadLine();
+
 
         }
     }
