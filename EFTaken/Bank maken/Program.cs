@@ -11,37 +11,64 @@ namespace Bank_maken
         static void Main(string[] args)
         {
             Program program = new Program();
-            Console.WriteLine("Geeft het rekeningnummer : ");
-            using(var entities = new BankEntities())
-            {
-                var selectedRekening = entities.Rekeningen.Find(Console.ReadLine());
-                if(selectedRekening != null)
-                {
-                    try
-                    {
-                        Console.WriteLine("Geef het te storten bedrag in :");
-                        decimal bedrag;
-                      while(!decimal.Parse(Console.ReadLine(), out bedrag) || bedrag < 0m)
-                      {
-                          Console.WriteLine("Tik een positief bedag"); ;
-                      }
-                        //if (bedrag <= decimal.Zero)
-                        //{
-                        //    Console.WriteLine("Tik een positief getal ");
-                        //}
-                    }
-                    catch (FormatException)
-                    {
 
-                        Console.WriteLine("Tik een bedag"); ;
+            Console.WriteLine("Geef het klantnummer :");
+            int klantnr;
+            if(int.TryParse(Console.ReadLine(),out klantnr))
+            {
+                using(var entities = new BankEntities())
+                {
+                    var klant = entities.Klanten.Find(klantnr);
+                    if(klant != null)
+                    {
+                        if (klant.Rekeningen.Count() == 0)
+                        {
+                            entities.Klanten.Remove(klant);
+                            entities.SaveChanges();
+                        }
+                        else
+                            Console.WriteLine("Klant heeft nog rekeningen");
                     }
+                    else
+                    {
+                        Console.WriteLine("Klant niet geveonden");
+                    }
+                }
+            }
+            else
+                Console.WriteLine("Tik een getal");
+            Console.ReadLine();
+            //Console.WriteLine("Geeft het rekeningnummer : ");
+            //using(var entities = new BankEntities())
+            //{
+            //    var selectedRekening = entities.Rekeningen.Find(Console.ReadLine());
+            //    if(selectedRekening != null)
+            //    {
+            //        try
+            //        {
+            //            Console.WriteLine("Geef het te storten bedrag in :");
+            //            decimal bedrag;
+            //          while(decimal.TryParse(Console.ReadLine(), out bedrag) || bedrag <= 0m)
+            //          {
+            //              Console.WriteLine("Tik een positief bedag"); ;
+            //          }
+            //            //if (bedrag <= decimal.Zero)
+            //            //{
+            //            //    Console.WriteLine("Tik een positief getal ");
+            //            //}
+            //        }
+            //        catch (FormatException)
+            //        {
+
+            //            Console.WriteLine("Tik een bedag"); ;
+            //        }
                    
                 
                    
-                }
-                else
-                    Console.WriteLine("Rekeningnummer niet gevonden");
-            }
+            //    }
+            //    else
+            //        Console.WriteLine("Rekeningnummer niet gevonden");
+            //}
 
 
 
