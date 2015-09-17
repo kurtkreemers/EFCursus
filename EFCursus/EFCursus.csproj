@@ -43,6 +43,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -74,20 +75,16 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Voorraad.cs">
+      <DependentUpon>Opleidingen.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="ClassDiagram1.cd" />
     <EntityDeploy Include="Opleidingen.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Opleidingen.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="ClassDiagram2.cd" />
-    <None Include="ClassDiagram3.cd" />
-    <None Include="ClassDiagram4.cd" />
-    <None Include="ClassDiagram5.cd" />
-    <None Include="ClassDiagram6.cd" />
-    <None Include="ClassDiagram7.cd" />
     <None Include="Opleidingen.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Opleidingen.edmx</DependentUpon>
