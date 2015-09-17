@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Bank_maken
 {
@@ -11,33 +12,113 @@ namespace Bank_maken
         static void Main(string[] args)
         {
             Program program = new Program();
-
-            Console.WriteLine("Geef het klantnummer :");
-            int klantnr;
-            if(int.TryParse(Console.ReadLine(),out klantnr))
+            try
             {
-                using(var entities = new BankEntities())
+                List<Klant> klantenLijst = program.GetKlanten();
+                foreach (var klant in klantenLijst)
                 {
-                    var klant = entities.Klanten.Find(klantnr);
-                    if(klant != null)
-                    {
-                        if (klant.Rekeningen.Count() == 0)
-                        {
-                            entities.Klanten.Remove(klant);
-                            entities.SaveChanges();
-                        }
-                        else
-                            Console.WriteLine("Klant heeft nog rekeningen");
-                    }
+                    Console.WriteLine(klant.KlantNr + ":" + klant.Voornaam);
+                }
+                Console.WriteLine("Klantnr:");
+                int result;
+
+                if (Int32.TryParse(Console.ReadLine(), out result))
+                {
+                    Klant klant = null;
+                    klant = klantenLijst.Where(kl => kl.KlantNr == result).FirstOrDefault();
+                    if (klant == null)
+                        Console.WriteLine("Klant niet gevonden!!!");
                     else
                     {
-                        Console.WriteLine("Klant niet geveonden");
+                        Console.WriteLine("Geef het nieuw zichtrekeningnummer :");
+                        var nieuweRekening = new Rekening { RekeningNr = Console.ReadLine(), KlantNr = klant.KlantNr, Saldo = 0, Soort = "Z" };
+                        using (var entities = new BankEntities())
+                        {
+                            entities.Rekeningen.Add(nieuweRekening);
+                            entities.SaveChanges();
+                        }
+                    }
+
+                    Console.WriteLine("Geef het rekeningnummer voor de overschrijving :");
+                    var vanRekening = Console.ReadLine();
+                    Console.WriteLine("Geef het rekeningnummer naar welk het bedrag moet :");
+                    var naarRekening = Console.ReadLine();
+                    Console.WriteLine("Geef het bedrag in :");
+                    var bedrag = int.Parse(Console.ReadLine());
+                    program.Overschrijving(vanRekening, naarRekening, bedrag);
+                }
+            }
+            catch (FormatException)
+            {
+
+                Console.WriteLine("Tik een getal in"); ;
+            }
+        }
+        
+
+            void Overschrijving(string vanrekening, string naarrekening,int bedrag)
+            {
+                var transactionOptions = new TransactionOptions { IsolationLevel = IsolationLevel.RepeatableRead };
+                using(var transactionScope = new TransactionScope(TransactionScopeOption.Required,transactionOptions))
+                {
+                    using(var entities = new BankEntities())
+                    {
+                        var vanRek = entities.Rekeningen.Find(vanrekening);
+                        if(vanRek != null)
+                        {
+                            if(vanRek.Saldo >= bedrag)
+                            {
+                                if (bedrag > 0)
+                                {
+                                    var naarRek = entities.Rekeningen.Find(naarrekening);
+                                    if (naarRek != null)
+                                    {
+                                        vanRek.Saldo -= bedrag;
+                                        naarRek.Saldo += bedrag;
+                                        entities.SaveChanges();
+                                        transactionScope.Complete();
+                                    }
+                                    else
+                                        Console.WriteLine("Naar rekening niet gevonden");
+                                }
+                                else
+                                    Console.WriteLine("Tik een positief bedrag in");
+                            }
+                            else
+                                Console.WriteLine("Saldo ontoereikend");
+                        }
+                        else
+                            Console.WriteLine("Van rekening niet gevonden");
                     }
                 }
             }
-            else
-                Console.WriteLine("Tik een getal");
-            Console.ReadLine();
+
+            //Console.WriteLine("Geef het klantnummer :");
+            //int klantnr;
+            //if(int.TryParse(Console.ReadLine(),out klantnr))
+            //{
+            //    using(var entities = new BankEntities())
+            //    {
+            //        var klant = entities.Klanten.Find(klantnr);
+            //        if(klant != null)
+            //        {
+            //            if (klant.Rekeningen.Count() == 0)
+            //            {
+            //                entities.Klanten.Remove(klant);
+            //                entities.SaveChanges();
+            //            }
+            //            else
+            //                Console.WriteLine("Klant heeft nog rekeningen");
+            //        }
+            //        else
+            //        {
+            //            Console.WriteLine("Klant niet geveonden");
+            //        }
+            //    }
+            //}
+            //else
+            //    Console.WriteLine("Tik een getal");
+            //Console.ReadLine();
             //Console.WriteLine("Geeft het rekeningnummer : ");
             //using(var entities = new BankEntities())
             //{
@@ -71,53 +152,50 @@ namespace Bank_maken
             //}
 
 
+            //List<Klant> klantenLijst = program.GetKlanten(); 
+            //foreach (var klant in klantenLijst)
+            //{
+            //    Console.WriteLine(klant.KlantNr + ":"+ klant.Voornaam);
+            //}
+            //Console.WriteLine("Klantnr:");
+            //int result;
 
+            //if(Int32.TryParse(Console.ReadLine(), out result))
+            //{
+            //    Klant klant = null;
+            //    klant = klantenLijst.Where(kl => kl.KlantNr == result).FirstOrDefault();
+            //    if (klant == null)
+            //        Console.WriteLine("Klant niet gevonden!!!");
+            //    else
+            //    {
+            //        Console.WriteLine("Geef het nieuw zichtrekeningnummer :");
+            //        var nieuweRekening = new Rekening { RekeningNr = Console.ReadLine(), KlantNr = klant.KlantNr, Saldo = 0, Soort = "Z" };
+            //        using (var entities = new BankEntities())
+            //        {
+            //            entities.Rekeningen.Add(nieuweRekening);
+            //            entities.SaveChanges();
+            //        }
+            //    }
 
+        //    }
+        //        else
+        //            Console.WriteLine("Tik een getal:");
 
-            List<Klant> klantenLijst = program.GetKlanten(); 
-            foreach (var klant in klantenLijst)
-            {
-                Console.WriteLine(klant.KlantNr + ":"+ klant.Voornaam);
-            }
-            Console.WriteLine("Klantnr:");
-            int result;
-
-            if(Int32.TryParse(Console.ReadLine(), out result))
-            {
-                Klant klant = null;
-                klant = klantenLijst.Where(kl => kl.KlantNr == result).FirstOrDefault();
-                if (klant == null)
-                    Console.WriteLine("Klant niet gevonden!!!");
-                else
-                {
-                    Console.WriteLine("Geef het nieuw zichtrekeningnummer :");
-                    var nieuweRekening = new Rekening { RekeningNr = Console.ReadLine(), KlantNr = klant.KlantNr, Saldo = 0, Soort = "Z" };
-                    using (var entities = new BankEntities())
-                    {
-                        entities.Rekeningen.Add(nieuweRekening);
-                        entities.SaveChanges();
-                    }
-                }
-
-            }
-                else
-                    Console.WriteLine("Tik een getal:");
-
-            foreach (var klant in program.FindAllRekeningen() )
-            {
-                Console.WriteLine(klant.Voornaam);
-                decimal totaal = 0;
-                foreach (var rekening in klant.Rekeningen)
-                {
+        //    foreach (var klant in program.FindAllRekeningen() )
+        //    {
+        //        Console.WriteLine(klant.Voornaam);
+        //        decimal totaal = 0;
+        //        foreach (var rekening in klant.Rekeningen)
+        //        {
                     
-                    Console.WriteLine(rekening.RekeningNr + "=" + rekening.Saldo);
-                    totaal += rekening.Saldo;
-                }
-                Console.WriteLine("Totaal : {0}",totaal);
-                Console.WriteLine();
-            }
-            Console.ReadLine();
-        }
+        //            Console.WriteLine(rekening.RekeningNr + "=" + rekening.Saldo);
+        //            totaal += rekening.Saldo;
+        //        }
+        //        Console.WriteLine("Totaal : {0}",totaal);
+        //        Console.WriteLine();
+        //    }
+        //    Console.ReadLine();
+        //}
         List<Klant> FindAllRekeningen()
         {
             using(var entities = new BankEntities())
