@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using System.Data.Entity.Infrastructure;
 
 namespace EFCursus
 {
@@ -15,56 +16,98 @@ namespace EFCursus
             {
                 Console.Write("Artikel nr.:");
                 var artikelNr = int.Parse(Console.ReadLine());
-                Console.Write("Van magazijn nr.:");
-                var vanMagazijnNr = int.Parse(Console.ReadLine());
-                Console.Write("Naar magazijn nr:");
-                var naarMagazijnNr = int.Parse(Console.ReadLine());
-                Console.Write("Aantal stuks:");
+                Console.Write("Magazijn nr.:");
+                var magazijnNr = int.Parse(Console.ReadLine());
+                Console.Write("Aantal stuks toevoegen:");
                 var aantalStuks = int.Parse(Console.ReadLine());
-
-                new Program().VoorraadTransfer(artikelNr, vanMagazijnNr, naarMagazijnNr,
-                aantalStuks);
+                new Program().VoorraadBijvulling(artikelNr, magazijnNr, aantalStuks);
             }
             catch (FormatException)
             {
-
                 Console.WriteLine("Tik een getal");
             }
         }
-        void VoorraadTransfer(int artikelNr, int vanMagazijnNr, int naarMagazijnNr, int aantalStuks)
+        void VoorraadBijvulling(int artikelNr, int magazijnNr, int aantalStuks)
         {
-            var transactionOptions = new TransactionOptions { IsolationLevel = System.Transactions.IsolationLevel.RepeatableRead };
-            using(var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions))
+            using (var entities = new OpleidingenEntities())
             {
-                using (var entities = new OpleidingenEntities())
+                var voorraad = entities.Voorraden.Find(magazijnNr, artikelNr);
+                if (voorraad != null)
                 {
-                    var vanVoorraad = entities.Voorraden.Find(vanMagazijnNr, artikelNr);
-                    if (vanVoorraad != null)
+                    voorraad.AantalStuks += aantalStuks;
+                    Console.WriteLine("Pas nu de voorraad aan met de Server Explorer," +
+                    " druk daarna op Enter");
+                    Console.ReadLine();
+                    try
                     {
-                        if (vanVoorraad.AantalStuks >= aantalStuks)
-                        {
-                            vanVoorraad.AantalStuks -= aantalStuks;
-                            var naarVoorraad = entities.Voorraden.Find(naarMagazijnNr, artikelNr);
-                            if (naarVoorraad != null)
-                            {
-                                naarVoorraad.AantalStuks += aantalStuks;
-                            }
-                            else
-                            {
-                                naarVoorraad = new Voorraad { ArtikelNr = artikelNr, MagazijnNr = naarMagazijnNr, AantalStuks = aantalStuks };
-                                entities.Voorraden.Add(naarVoorraad);
-                            }
-                            entities.SaveChanges();
-                            transactionScope.Complete();
-
-                        }
-                        else
-                            Console.WriteLine("Te weinig voorraad voor transfer");
+                        entities.SaveChanges();
                     }
-                    else
-                        Console.WriteLine("Artikel niet gevonden in magazijn {0}", vanMagazijnNr);
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        
+                        Console.WriteLine("Voorraad werd door andere applicatie aangepast.");
+                    }
+                    
+                }
+                else
+                {
+                    Console.WriteLine("Voorraad niet gevonden");
                 }
             }
+        //    try
+        //    {
+        //        Console.Write("Artikel nr.:");
+        //        var artikelNr = int.Parse(Console.ReadLine());
+        //        Console.Write("Van magazijn nr.:");
+        //        var vanMagazijnNr = int.Parse(Console.ReadLine());
+        //        Console.Write("Naar magazijn nr:");
+        //        var naarMagazijnNr = int.Parse(Console.ReadLine());
+        //        Console.Write("Aantal stuks:");
+        //        var aantalStuks = int.Parse(Console.ReadLine());
+
+        //        new Program().VoorraadTransfer(artikelNr, vanMagazijnNr, naarMagazijnNr,
+        //        aantalStuks);
+        //    }
+        //    catch (FormatException)
+        //    {
+
+        //        Console.WriteLine("Tik een getal");
+        //    }
+        //}
+        //void VoorraadTransfer(int artikelNr, int vanMagazijnNr, int naarMagazijnNr, int aantalStuks)
+        //{
+        //    var transactionOptions = new TransactionOptions { IsolationLevel = System.Transactions.IsolationLevel.RepeatableRead };
+        //    using(var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions))
+        //    {
+        //        using (var entities = new OpleidingenEntities())
+        //        {
+        //            var vanVoorraad = entities.Voorraden.Find(vanMagazijnNr, artikelNr);
+        //            if (vanVoorraad != null)
+        //            {
+        //                if (vanVoorraad.AantalStuks >= aantalStuks)
+        //                {
+        //                    vanVoorraad.AantalStuks -= aantalStuks;
+        //                    var naarVoorraad = entities.Voorraden.Find(naarMagazijnNr, artikelNr);
+        //                    if (naarVoorraad != null)
+        //                    {
+        //                        naarVoorraad.AantalStuks += aantalStuks;
+        //                    }
+        //                    else
+        //                    {
+        //                        naarVoorraad = new Voorraad { ArtikelNr = artikelNr, MagazijnNr = naarMagazijnNr, AantalStuks = aantalStuks };
+        //                        entities.Voorraden.Add(naarVoorraad);
+        //                    }
+        //                    entities.SaveChanges();
+        //                    transactionScope.Complete();
+
+        //                }
+        //                else
+        //                    Console.WriteLine("Te weinig voorraad voor transfer");
+        //            }
+        //            else
+        //                Console.WriteLine("Artikel niet gevonden in magazijn {0}", vanMagazijnNr);
+        //        }
+        //    }
         }
         //Console.WriteLine("Minimum wedde");
         //decimal minWedde;

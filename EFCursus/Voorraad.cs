@@ -18,5 +18,6 @@ namespace EFCursus
         public int ArtikelNr { get; set; }
         public int AantalStuks { get; set; }
         public int RekNr { get; set; }
+        public byte[] Aangepast { get; set; }
     }
 }
