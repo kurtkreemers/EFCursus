@@ -209,26 +209,48 @@ namespace EFCursus
             //        Console.WriteLine("Docent 1 niet gevonden");
             //    }
             //}
-            using (var entities = new OpleidingenEntities())
+            //using (var entities = new OpleidingenEntities())
+            //{
+            //    var docent1 = entities.Docenten.Find(1);
+            //    if (docent1 != null)
+            //    {
+            //        var campus3 = entities.Campussen.Find(3);
+            //        if (campus3 != null)
+            //        {
+            //            campus3.Docenten.Add(docent1);
+            //            entities.SaveChanges();
+            //        }
+            //        else
+            //        {
+            //            Console.WriteLine("Campus 3 niet gevonden");
+            //        }
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("Docent 1 niet gevonden");
+            //    }
+            //}
+            Console.Write("Nummer docent:");
+            int docentNr;
+            if (int.TryParse(Console.ReadLine(), out docentNr))
             {
-                var docent1 = entities.Docenten.Find(1);
-                if (docent1 != null)
+                using (var entities = new OpleidingenEntities())
                 {
-                    var campus3 = entities.Campussen.Find(3);
-                    if (campus3 != null)
+                    var docent = entities.Docenten.Find(docentNr);
+                    if (docent != null)
                     {
-                        campus3.Docenten.Add(docent1);
+                        entities.Docenten.Remove(docent);
                         entities.SaveChanges();
                     }
                     else
                     {
-                        Console.WriteLine("Campus 3 niet gevonden");
+                        Console.WriteLine("Docent niet gevonden");
                     }
                 }
-                else
-                {
-                    Console.WriteLine("Docent 1 niet gevonden");
-                }
+            }
+            else
+            {
+                Console.WriteLine("Tik een getal");
             }
 
             Console.ReadLine();
