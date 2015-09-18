@@ -12,20 +12,177 @@ namespace EFCursus
     {
         static void Main(string[] args)
         {
-            try
+            using (var entities = new OpleidingenEntities())
             {
-                Console.Write("Artikel nr.:");
-                var artikelNr = int.Parse(Console.ReadLine());
-                Console.Write("Magazijn nr.:");
-                var magazijnNr = int.Parse(Console.ReadLine());
-                Console.Write("Aantal stuks toevoegen:");
-                var aantalStuks = int.Parse(Console.ReadLine());
-                new Program().VoorraadBijvulling(artikelNr, magazijnNr, aantalStuks);
+                var cursist5 = entities.Cursisten.Find(5);
+                if (cursist5 != null)
+                {
+                    var cursist6 = entities.Cursisten.Find(6);
+                    if (cursist6 != null)
+                    {
+                        cursist5.Beschermelingen.Add(cursist6);
+                        entities.SaveChanges();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Cursist 6 niet gevonden");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Cursist 5 niet gevonden");
+                }
             }
-            catch (FormatException)
-            {
-                Console.WriteLine("Tik een getal");
-            }
+
+            //using (var entities = new OpleidingenEntities())
+            //{
+            //    var query = from mentor in entities.Cursisten.Include("Beschermelingen")
+            //                where mentor.Beschermelingen.Count != 0
+            //                orderby mentor.Voornaam, mentor.Familienaam
+            //                select mentor;
+            //    foreach (var mentor in query)
+            //    {
+            //        Console.WriteLine("{0} {1}", mentor.Voornaam, mentor.Familienaam);
+            //        foreach (var beschermeling in mentor.Beschermelingen)
+            //        {
+            //            Console.WriteLine("\t{0} {1}", beschermeling.Voornaam, beschermeling.Familienaam);
+            //        }
+            //    }
+            //}
+            //    var query = from cursist in entities.Cursisten.Include("Mentor")
+            //                where cursist.Mentor != null
+            //                orderby cursist.Voornaam, cursist.Familienaam
+            //                select cursist;
+            //    foreach (var cursist in query)
+            //    {
+            //        var mentor = cursist.Mentor;
+            //        Console.WriteLine("{0} {1}: {2} {3}", cursist.Voornaam, cursist.Familienaam,
+            //        mentor.Voornaam, mentor.Familienaam);
+            //    }
+            //}
+            //using (var entities = new OpleidingenEntities())
+            //{
+            //    var query = from cursist in entities.Cursisten
+            //                where cursist.Mentor == null
+            //                orderby cursist.Voornaam, cursist.Familienaam
+            //                select cursist;
+            //    foreach (var cursist in query)
+            //    {
+            //        Console.WriteLine("{0} {1}", cursist.Voornaam, cursist.Familienaam);
+            //    }
+            //}
+            //var nieuwBoek = new Boek() { ISBNNr = "0-201-70431-5", Titel = "Modern C++ Design" };
+            //var transactionOptions = new System.Transactions.TransactionOptions { IsolationLevel = System.Transactions.IsolationLevel.Serializable };
+            //using (var transactionScope = new System.Transactions.TransactionScope(
+            //System.Transactions.TransactionScopeOption.Required, transactionOptions))
+            //{
+            //    using (var entities = new OpleidingenEntities())
+            //    {
+            //        // Cursus C++ ophalen
+            //        // én het hoogste volgnr. van boek gebruikt in die cursus.
+            //        // Met transactie met isolation level Serializable
+            //        // kan daarna niemand anders een boek toevoegen aan C++ cursus
+            //        // en is het nieuwe volgnr gelijk aan 1 + hoogst gelezen volgnr
+            //        var query = from cursus in entities.Cursussen.Include("BoekenCursussen")
+            //                    where cursus.Naam == "C++"
+            //                    select new
+            //                    {
+            //                        Cursus = cursus,
+            //                        HoogsteVolgnr = cursus.BoekenCursussen.Max(
+            //                        boekCursus => boekCursus.VolgNr)
+            //                    };
+            //        var queryResult = query.FirstOrDefault();
+            //        if (queryResult != null)
+            //        {
+            //            entities.BoekenCursussen.Add(new BoekCursus
+            //            {
+            //                Boek = nieuwBoek,
+            //                Cursus = queryResult.Cursus,
+            //                VolgNr = queryResult.HoogsteVolgnr + 1
+            //            });
+            //            entities.SaveChanges();
+            //        }
+            //        transactionScope.Complete();
+            //    }
+            //}
+            //using (var entities = new OpleidingenEntities())
+            //{
+            //    var query =
+            //    from cursus in entities.Cursussen.Include("BoekenCursussen.Boek")
+            //    orderby cursus.Naam
+            //    select cursus;
+            //    foreach (var cursus in query)
+            //    {
+            //        Console.WriteLine(cursus.Naam);
+            //        foreach (var boekCursus in cursus.BoekenCursussen)
+            //        {
+            //            Console.WriteLine("\t{0}:{1}", boekCursus.VolgNr, boekCursus.Boek.Titel);
+            //        }
+            //    }
+            //}
+            //using (var entities = new OpleidingenEntities())
+            //{
+            //    var nieuwBoek = new Boek
+            //    {
+            //        ISBNNr = "0-0788210-6-1",
+            //        Titel = "Oracle Backup & Recovery Handbook"
+            //    };
+            //    var oracleCursus = (from cursus in entities.Cursussen
+            //                        where cursus.Naam == "Oracle"
+            //                        select cursus).FirstOrDefault();
+            //    if (oracleCursus != null)
+            //    {
+            //        oracleCursus.Boeken.Add(nieuwBoek);
+            //        entities.SaveChanges();
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("cursus Oracle niet gevonden");
+            //    }
+            //}
+            //using (var entities = new OpleidingenEntities())
+            //{
+            //    var query = from boek in entities.Boeken.Include("Cursussen")
+            //                orderby boek.Titel
+            //                select boek;
+            //    foreach (var boek in query)
+            //    {
+            //        Console.WriteLine(boek.Titel);
+            //        foreach (var cursus in boek.Cursussen)
+            //        {
+            //            Console.WriteLine("\t{0}", cursus.Naam);
+            //        }
+            //    }
+            //}
+            //using (var entities = new OpleidingenEntities())
+            //{
+            //    var query = from cursus in entities.Cursussen.Include("Boeken")
+            //                orderby cursus.Naam
+            //                select cursus;
+            //    foreach (var cursus in query)
+            //    {
+            //        Console.WriteLine(cursus.Naam);
+            //        foreach (var boek in cursus.Boeken)
+            //        {
+            //            Console.WriteLine("\t{0}", boek.Titel);
+            //        }
+            //    }
+            //}
+            Console.Read();
+            //try
+            //{
+            //    Console.Write("Artikel nr.:");
+            //    var artikelNr = int.Parse(Console.ReadLine());
+            //    Console.Write("Magazijn nr.:");
+            //    var magazijnNr = int.Parse(Console.ReadLine());
+            //    Console.Write("Aantal stuks toevoegen:");
+            //    var aantalStuks = int.Parse(Console.ReadLine());
+            //    new Program().VoorraadBijvulling(artikelNr, magazijnNr, aantalStuks);
+            //}
+            //catch (FormatException)
+            //{
+            //    Console.WriteLine("Tik een getal");
+            //}
         }
         void VoorraadBijvulling(int artikelNr, int magazijnNr, int aantalStuks)
         {
