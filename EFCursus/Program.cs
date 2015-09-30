@@ -12,27 +12,51 @@ namespace EFCursus
     {
         static void Main(string[] args)
         {
+            //using (var entities = new OpleidingenEntities())
+            //{
+            //    entities.Cursussen.Add(
+            //    new ZelfstudieCursus { Naam = "Duitse correspondentie", Duurtijd = 6 });
+            //    entities.SaveChanges();
+            //}
+            //using (var entities = new OpleidingenEntities())
+            //{
+            //    entities.Cursussen.Add(
+            //    new ZelfstudieCursus { Naam = "Italiaanse correspondentie", Duurtijd = 6 });
+            //    entities.SaveChanges();
+            //}
+            
             using (var entities = new OpleidingenEntities())
             {
-                var cursist5 = entities.Cursisten.Find(5);
-                if (cursist5 != null)
+                var query = from cursus in entities.Cursussen
+                            //where cursus is ZelfstudieCursus
+                            orderby cursus.Naam
+                            select cursus;
+                foreach (var cursus in query)
                 {
-                    var cursist6 = entities.Cursisten.Find(6);
-                    if (cursist6 != null)
-                    {
-                        cursist5.Beschermelingen.Add(cursist6);
-                        entities.SaveChanges();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Cursist 6 niet gevonden");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("Cursist 5 niet gevonden");
+                    Console.WriteLine(cursus.Naam + ' ' + cursus.GetType().Name);
                 }
             }
+            //using (var entities = new OpleidingenEntities())
+            //{
+            //    var cursist5 = entities.Cursisten.Find(5);
+            //    if (cursist5 != null)
+            //    {
+            //        var cursist6 = entities.Cursisten.Find(6);
+            //        if (cursist6 != null)
+            //        {
+            //            cursist5.Beschermelingen.Add(cursist6);
+            //            entities.SaveChanges();
+            //        }
+            //        else
+            //        {
+            //            Console.WriteLine("Cursist 6 niet gevonden");
+            //        }
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("Cursist 5 niet gevonden");
+            //    }
+            //}
 
             //using (var entities = new OpleidingenEntities())
             //{

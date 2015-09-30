@@ -12,16 +12,9 @@ namespace EFCursus
     using System;
     using System.Collections.Generic;
     
-    public partial class Cursus
+    public abstract partial class Cursus
     {
-        public Cursus()
-        {
-            this.BoekenCursussen = new HashSet<BoekCursus>();
-        }
-    
         public int CursusNr { get; set; }
         public string Naam { get; set; }
-    
-        public virtual ICollection<BoekCursus> BoekenCursussen { get; set; }
     }
 }
