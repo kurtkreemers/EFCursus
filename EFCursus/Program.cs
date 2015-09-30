@@ -12,6 +12,14 @@ namespace EFCursus
     {
         static void Main(string[] args)
         {
+            using (var entities = new OpleidingenEntities())
+            {
+                foreach (var cursist in
+                (from eenCursist in entities.Cursisten select eenCursist))
+                {
+                    Console.WriteLine(cursist.Naam.FormeleBegroeting);
+                }
+            }
             //using (var entities = new OpleidingenEntities())
             //{
             //    entities.Cursussen.Add(
@@ -25,17 +33,17 @@ namespace EFCursus
             //    entities.SaveChanges();
             //}
             
-            using (var entities = new OpleidingenEntities())
-            {
-                var query = from cursus in entities.Cursussen
-                            //where cursus is ZelfstudieCursus
-                            orderby cursus.Naam
-                            select cursus;
-                foreach (var cursus in query)
-                {
-                    Console.WriteLine(cursus.Naam + ' ' + cursus.GetType().Name);
-                }
-            }
+            //using (var entities = new OpleidingenEntities())
+            //{
+            //    var query = from cursus in entities.Cursussen
+            //                //where cursus is ZelfstudieCursus
+            //                orderby cursus.Naam
+            //                select cursus;
+            //    foreach (var cursus in query)
+            //    {
+            //        Console.WriteLine(cursus.Naam + ' ' + cursus.GetType().Name);
+            //    }
+            //}
             //using (var entities = new OpleidingenEntities())
             //{
             //    var cursist5 = entities.Cursisten.Find(5);
