@@ -11,15 +11,35 @@ namespace EFCursus
     class Program
     {
         static void Main(string[] args)
-        {
+        //{
+        //    using (var entities = new OpleidingenEntities())
+        //    {
+        //        entities.Docenten.Add(
+        //        new Docent
+        //        {
+        //            Naam = new Naam { Voornaam = "Brigitta", Familienaam = "Roos" },
+        //            Wedde = 2000,
+        //            Geslacht = Geslacht.Vrouw,
+        //            CampusNr = 1
+        //        });
+        //        entities.SaveChanges();
+        //    }
+
             using (var entities = new OpleidingenEntities())
             {
-                foreach (var cursist in
-                (from eenCursist in entities.Cursisten select eenCursist))
+                foreach (var docent in entities.Docenten)
                 {
-                    Console.WriteLine(cursist.Naam.FormeleBegroeting);
+                    Console.WriteLine("{0}:{1}", docent.Naam, docent.Geslacht);
                 }
             }
+            //using (var entities = new OpleidingenEntities())
+            //{
+            //    foreach (var cursist in
+            //    (from eenCursist in entities.Cursisten select eenCursist))
+            //    {
+            //        Console.WriteLine(cursist.Naam.FormeleBegroeting);
+            //    }
+            //}
             //using (var entities = new OpleidingenEntities())
             //{
             //    entities.Cursussen.Add(
