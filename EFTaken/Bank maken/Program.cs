@@ -10,18 +10,28 @@ namespace Bank_maken
 {
     class Program
     {
+     
         static void Main(string[] args)
         {
-            using(var entities = new BankEntities())
+            using (var entities = new BankEntities())
             {
-                var zichtList = from rekening in entities.Rekeningen
-                                where rekening is ZichtRekening
-                                select rekening;
-                foreach (var rek in zichtList)
+                var query = from klant in entities.TotaleSaldoPerKlant
+                            select klant;
+                foreach (var klant in query)
                 {
-                    Console.WriteLine(rek.RekeningNr + " " + rek.Saldo);
+                    Console.WriteLine(klant.Voornaam + " " + klant.TotaleSaldo);
                 }
             }
+        //    using(var entities = new BankEntities())
+        //    {
+        //        var zichtList = from rekening in entities.Rekeningen
+        //                        where rekening is ZichtRekening
+        //                        select rekening;
+        //        foreach (var rek in zichtList)
+        //        {
+        //            Console.WriteLine(rek.RekeningNr + " " + rek.Saldo);
+        //        }
+        //    }
 
             Console.ReadLine();
         ///   using (var entities = new BankEntities())

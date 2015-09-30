@@ -81,6 +81,9 @@
     <Compile Include="SpaarRekening.cs">
       <DependentUpon>BankMaken.tt</DependentUpon>
     </Compile>
+    <Compile Include="TotaleSaldoPerKlant.cs">
+      <DependentUpon>BankMaken.tt</DependentUpon>
+    </Compile>
     <Compile Include="ZichtRekening.cs">
       <DependentUpon>BankMaken.tt</DependentUpon>
     </Compile>
