@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\zi16\documents\visual studio 2013\Projects\EFTaken\Bank maken\BankMaken.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\zi16\Documents\Visual Studio 2013\Projects\EFTaken\Bank maken\BankMaken.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

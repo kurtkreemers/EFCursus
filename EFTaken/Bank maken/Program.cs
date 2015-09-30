@@ -12,29 +12,41 @@ namespace Bank_maken
     {
         static void Main(string[] args)
         {
-
-            using (var entities = new BankEntities())
+            using(var entities = new BankEntities())
             {
-                var hoogsteRang = (from perslid in entities.Personeel
-                                   where perslid.ManagerNr == null
-                                   select perslid).ToList();
-                new Program().visual(hoogsteRang, 0);
-                Console.ReadLine();
-            }
-
-        }
-        void visual(List<PersoneelsLid> personeelsleden, int rang)
-        {
-            foreach (var perslid in personeelsleden)
-            {
-                Console.Write(new string('\t', rang));
-                Console.WriteLine(perslid.Voornaam);
-                if (perslid.Personeelsleden.Count != 0)
+                var zichtList = from rekening in entities.Rekeningen
+                                where rekening is ZichtRekening
+                                select rekening;
+                foreach (var rek in zichtList)
                 {
-                    visual(perslid.Personeelsleden.ToList(), rang + 1);
+                    Console.WriteLine(rek.RekeningNr + " " + rek.Saldo);
                 }
-            
             }
+
+            Console.ReadLine();
+        ///   using (var entities = new BankEntities())
+        ////    {
+        ////        var hoogsteRang = (from perslid in entities.Personeel
+        ////                           where perslid.ManagerNr == null
+        ////                           select perslid).ToList();
+        ////        new Program().visual(hoogsteRang, 0);
+        ////        Console.ReadLine();
+        ////    }
+
+        //}
+        //void visual(List<PersoneelsLid> personeelsleden, int rang)
+        //{
+        //    foreach (var perslid in personeelsleden)
+        //    {
+        //        Console.Write(new string('\t', rang));
+        //        Console.WriteLine(perslid.Voornaam);
+        //        if (perslid.Personeelsleden.Count != 0)
+        //        {
+        //            visual(perslid.Personeelsleden.ToList(), rang + 1);
+        //        }
+            
+        //    }
+
            
         }
 

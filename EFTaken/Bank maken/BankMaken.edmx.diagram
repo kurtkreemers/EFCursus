@@ -10,6 +10,10 @@
         <AssociationConnector Association="BankModel.FK__Rekeninge__Klant__1273C1CD" ManuallyRouted="false" />
         <EntityTypeShape EntityType="BankModel.PersoneelsLid" Width="1.5" PointX="5.75" PointY="1.375" />
         <AssociationConnector Association="BankModel.FK__Personeel__Manag__239E4DCF" />
+        <EntityTypeShape EntityType="BankModel.ZichtRekening" Width="1.5" PointX="1.875" PointY="4.125" />
+        <EntityTypeShape EntityType="BankModel.SpaarRekening" Width="1.5" PointX="4.375" PointY="4.125" />
+        <InheritanceConnector EntityType="BankModel.ZichtRekening" />
+        <InheritanceConnector EntityType="BankModel.SpaarRekening" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

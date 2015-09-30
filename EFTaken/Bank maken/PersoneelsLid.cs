@@ -12,12 +12,18 @@ namespace Bank_maken
     using System;
     using System.Collections.Generic;
     
-    public abstract partial class Rekening
+    public partial class PersoneelsLid
     {
-        public string RekeningNr { get; set; }
-        public int KlantNr { get; set; }
-        public decimal Saldo { get; set; }
+        public PersoneelsLid()
+        {
+            this.Personeelsleden = new HashSet<PersoneelsLid>();
+        }
     
-        public virtual Klant Klant { get; set; }
+        public int PersoneelsNr { get; set; }
+        public string Voornaam { get; set; }
+        public Nullable<int> ManagerNr { get; set; }
+    
+        public virtual ICollection<PersoneelsLid> Personeelsleden { get; set; }
+        public virtual PersoneelsLid Manager { get; set; }
     }
 }

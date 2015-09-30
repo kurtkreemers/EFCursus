@@ -12,12 +12,7 @@ namespace Bank_maken
     using System;
     using System.Collections.Generic;
     
-    public abstract partial class Rekening
+    public partial class SpaarRekening : Rekening
     {
-        public string RekeningNr { get; set; }
-        public int KlantNr { get; set; }
-        public decimal Saldo { get; set; }
-    
-        public virtual Klant Klant { get; set; }
     }
 }
