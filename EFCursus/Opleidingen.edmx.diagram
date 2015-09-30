@@ -16,6 +16,7 @@
         <EntityTypeShape EntityType="OpleidingenModel.ZelfstudieCursus" Width="1.5" PointX="8" PointY="5.375" />
         <InheritanceConnector EntityType="OpleidingenModel.ZelfstudieCursus" />
         <InheritanceConnector EntityType="OpleidingenModel.KlassikaleCursus" />
+        <EntityTypeShape EntityType="OpleidingenModel.BestBetaaldeDocentPerCampus" Width="3.125" PointX="0.75" PointY="6.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

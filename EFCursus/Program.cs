@@ -11,7 +11,28 @@ namespace EFCursus
     class Program
     {
         static void Main(string[] args)
-        //{
+        {
+            using (var entities = new OpleidingenEntities())
+            {
+                var query = from bestBetaaldeDocentPerCampus
+                in entities.BestBetaaldeDocentenPerCampus
+                            orderby bestBetaaldeDocentPerCampus.CampusNr,
+                            bestBetaaldeDocentPerCampus.Voornaam,
+                            bestBetaaldeDocentPerCampus.Familienaam
+                            select bestBetaaldeDocentPerCampus;
+                var vorigCampusNr = 0;
+                foreach (var bestbetaaldeDocentPerCampus in query)
+                {
+                    if (bestbetaaldeDocentPerCampus.CampusNr != vorigCampusNr)
+                    {
+                        Console.WriteLine("{0} {1} Grootste wedde:",
+                        bestbetaaldeDocentPerCampus.Naam, bestbetaaldeDocentPerCampus.GrootsteWedde);
+                        vorigCampusNr = bestbetaaldeDocentPerCampus.CampusNr;
+                    }
+                    Console.WriteLine("\t{0} {1}",
+                    bestbetaaldeDocentPerCampus.Voornaam, bestbetaaldeDocentPerCampus.Familienaam);
+                }
+            }
         //    using (var entities = new OpleidingenEntities())
         //    {
         //        entities.Docenten.Add(
@@ -26,12 +47,12 @@ namespace EFCursus
         //    }
 
             using (var entities = new OpleidingenEntities())
-            {
-                foreach (var docent in entities.Docenten)
-                {
-                    Console.WriteLine("{0}:{1}", docent.Naam, docent.Geslacht);
-                }
-            }
+            //{
+            //    foreach (var docent in entities.Docenten)
+            //    {
+            //        Console.WriteLine("{0}:{1}", docent.Naam, docent.Geslacht);
+            //    }
+            //}
             //using (var entities = new OpleidingenEntities())
             //{
             //    foreach (var cursist in
