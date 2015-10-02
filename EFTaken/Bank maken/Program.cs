@@ -13,15 +13,29 @@ namespace Bank_maken
      
         static void Main(string[] args)
         {
-            using (var entities = new BankEntities())
+            Console.Write("Kostbedrag :");
+            decimal kost;
+            if (decimal.TryParse(Console.ReadLine(), out kost))
             {
-                var query = from klant in entities.TotaleSaldoPerKlant
-                            select klant;
-                foreach (var klant in query)
+                using (var entities = new BankEntities())
                 {
-                    Console.WriteLine(klant.Voornaam + " " + klant.TotaleSaldo);
+                    var aantalRekeningenAangepast = entities.AdministratieveKost(kost);
+                    Console.WriteLine("{0} rekeningen aangepast", aantalRekeningenAangepast );
                 }
             }
+            else
+            {
+                Console.WriteLine("Tik een getal");
+            }
+            //using (var entities = new BankEntities())
+            //{
+            //    var query = from klant in entities.TotaleSaldoPerKlant
+            //                select klant;
+            //    foreach (var klant in query)
+            //    {
+            //        Console.WriteLine(klant.Voornaam + " " + klant.TotaleSaldo);
+            //    }
+            //}
         //    using(var entities = new BankEntities())
         //    {
         //        var zichtList = from rekening in entities.Rekeningen
